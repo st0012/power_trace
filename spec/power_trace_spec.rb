@@ -21,18 +21,18 @@ RSpec.describe PowerTrace do
 
   let(:expected_output) do
 /.*:18:in `forth_call'
-  Arguments:
+    \(Arguments\)
     num1: 20
     num2: 10
 .*:9:in `block in second_call'
-  Arguments:
+    \(Locals\)
     ten: 10
     num: 20
 .*:14:in `third_call_with_block'
-  Arguments:
+    \(Arguments\)
     block: #<Proc:.*@.*:8>
 .*:8:in `second_call'
-  Arguments:
+    \(Arguments\)
     num: 20/
   end
 

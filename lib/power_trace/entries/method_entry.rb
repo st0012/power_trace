@@ -1,17 +1,7 @@
 module PowerTrace
   class MethodEntry < Entry
-    def name(options = {})
-      @frame.frame_description
-    end
-
     def method
       @method ||= Object.instance_method(:method).bind(@receiver).call(name)
-    end
-
-    def arguments
-      @arguments ||= frame.local_variables.each_with_object({}) do |name, args|
-        args[name] = frame.local_variable_get(name) if method_parameters.include?(name)
-      end
     end
 
     def method_parameters
