@@ -3,7 +3,7 @@ require "power_trace/stack"
 
 module PowerTrace
   def power_trace
-    puts(PowerTrace::Stack.new.to_s)
+    PowerTrace::Stack.new
   end
 end
 
