@@ -1,39 +1,117 @@
-# PowerTrace
+# power_trace
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/power_trace`. To experiment with that code, run `bin/console` for an interactive prompt.
+![Ruby](https://github.com/st0012/power_trace/workflows/Ruby/badge.svg)
 
-TODO: Delete this and the text above, and describe your gem
+Backtrace (Stack traces) are essential information for debugging our applications. However, they only tell us what the program did, but don't tell us what it had (the arguments, local variables...etc.). So it's very often that we'd need to visit each call site, rerun the program, and try to print out the variables. To me, It's like the Google map's navigation only tells us the name of the roads, but not showing us the map along with them.
+
+So I hope to solve this problem by adding some additional runtime info to the backtrace, and save us the work to manually look them up.
+
+**Please Don't Use It On Production**
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'power_trace'
+gem 'power_trace', group: [:test, :development]
 ```
 
 And then execute:
 
-    $ bundle install
+```
+$ bundle install
+```
 
 Or install it yourself as:
 
-    $ gem install power_trace
+```
+$ gem install power_trace
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+### Call `power_trace` directly
+
+If you call `power_trace` directly, it'll return a `PowerTrace::Stack` instance that contains all the processed traces. You can then use it in 3 different ways:
+
+- Print it directly
+- Access each trace (`Entry` instance)
+- Convert it into backtraces (an array of strings)
+
+#### Print It Directly
+
+You can use `puts(power_trace)` to print the beautiful output to stdout:
+
+![print power_trace directly](https://github.com/st0012/power_trace/blob/master/images/print_directly.png)
+
+It should look just like the normal `puts(caller)`, just colorized and with more helpful info.
+
+#### Access Individual Entries
+
+Except for the call site, each entry also contains rich information about the runtime context. You can build your own debugging tool with that information easily.
+
+There are 2 types of entries:
+
+- `MethodEntry`- a method call's trace
+- `BlockEntry` - a block evaluation's trace
+
+They both have these attributes:
+
+- `filepath`
+- `line_number`
+- `receiver` - the receiver object
+- `frame` - the call frame (`Binding`) object
+- `locals` - local variables in that frame
+- `arguments`
+    - the method call's arguments
+    - will always be empty for a `BlockEntry`
+
+![use individual entries](https://github.com/st0012/power_trace/blob/master/images/entries.png)
+
+#### Convert It Into Backtraces
+
+You can do it by calling `power_trace.to_backtrace`. The major usage is to replace an exception object's backtrace like
+
+```ruby
+a_exception.set_backtrace(power_trace.to_backtrace)
+```
+
+I don't recommend using it like this for other purposes, though. Because by default, all entries will be color-encoded strings. Also, the embedded arguments/locals aren't easily parseable. For other uses, you should either print it directly or process the traces without calling `to_backtrace`.
+
+#### Options
+
+- `colorize` - to decide whether to colorize each entry in their string format. Default is `true`.
+- `line_limit` - `power_trace` truncates every argument/local variable's value to avoid creating too much noise. Default is `100`
+
+### Get `power_trace` From An Exception (Experimental)
+
+You can also access an exception object's enhanced backtrace with the `power_trace` method:
+
+```ruby
+begin
+  perform_a_call
+rescue => e
+  e.power_trace # <= like this
+end
+```
+
+And use it as you get it from the call site.
+
+## Inspirations & Helpful Tools
+
+- [pretty_backtrace](https://github.com/ko1/pretty_backtrace)
+- [pry-stack_explorer](https://github.com/pry/pry-stack_explorer)
+- [tapping_device](https://github.com/st0012/tapping_device)
 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org/).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/power_trace. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/power_trace/blob/master/CODE_OF_CONDUCT.md).
-
+Bug reports and pull requests are welcome on GitHub at [https://github.com/[USERNAME]/power_trace](https://github.com/%5BUSERNAME%5D/power_trace). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/%5BUSERNAME%5D/power_trace/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -41,4 +119,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the PowerTrace project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/power_trace/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the PowerTrace project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/%5BUSERNAME%5D/power_trace/blob/master/CODE_OF_CONDUCT.md).
