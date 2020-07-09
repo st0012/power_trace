@@ -38,8 +38,6 @@ RSpec.describe PowerTrace do
     end
 
     def inspect_method
-      puts(caller)
-      puts("================")
       puts(power_trace)
     end
   end
