@@ -45,7 +45,9 @@ module PowerTrace
 
     def extract_entries
       frames = frame_manager.bindings
-      power_trace_index = frames.index { |b| b.frame_description&.to_sym == :power_trace }
+      # when using pry console, the power_trace_index will be `nil` and breaks EVERYTHING
+      # so we should fallback it to 0
+      power_trace_index = frames.index { |b| b.frame_description&.to_sym == :power_trace } || 0
       frames[power_trace_index+1..].map do |b|
         case b.frame_type
         when :method
