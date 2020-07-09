@@ -14,6 +14,7 @@ module PowerTrace
 
     def initialize(options = {})
       @options = options
+      @exception = options.fetch(:exception, false)
       @entries = extract_entries.compact
     end
 
@@ -28,6 +29,10 @@ module PowerTrace
 
     def to_s(output_options = {})
       to_backtrace(output_options).join("\n")
+    end
+
+    def empty?
+      @entries.empty?
     end
 
     private
@@ -47,8 +52,10 @@ module PowerTrace
       frames = frame_manager.bindings
       # when using pry console, the power_trace_index will be `nil` and breaks EVERYTHING
       # so we should fallback it to 0
-      power_trace_index = frames.index { |b| b.frame_description&.to_sym == :power_trace } || 0
-      frames[power_trace_index+1..].map do |b|
+      power_trace_index = (frames.index { |b| b.frame_description&.to_sym == :power_trace } || 0) + 1
+      power_trace_index += 1 if @exception
+
+      frames[power_trace_index..].map do |b|
         case b.frame_type
         when :method
           MethodEntry.new(b)
