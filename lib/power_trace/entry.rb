@@ -2,6 +2,15 @@ module PowerTrace
   class Entry
     UNDEFINED = "[undefined]"
 
+    COLOR_CODES = {
+      green: 10,
+      yellow: 11,
+      blue: 12,
+      megenta: 13,
+      cyan: 14,
+      orange: 214
+    }
+
     attr_reader :frame, :filepath, :line_number, :receiver
 
     def initialize(frame)
@@ -29,7 +38,7 @@ module PowerTrace
     end
 
     def call_trace
-      "#{filepath}:#{line_number}:in `#{method_name}"
+      "#{filepath}:#{line_number}:in `#{method_name}'"
     end
 
     def to_s(options = {})
