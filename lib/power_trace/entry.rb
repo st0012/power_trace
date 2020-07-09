@@ -1,4 +1,5 @@
 require "power_trace/helpers/colorize_helper"
+require "active_support/core_ext/string"
 
 module PowerTrace
   class Entry
@@ -20,7 +21,7 @@ module PowerTrace
     end
 
     def arguments_string(options = {})
-      generate_string_result(arguments, false)
+      generate_string_result(arguments, false).truncate(options[:line_limit])
     end
 
     def call_trace(options = {})

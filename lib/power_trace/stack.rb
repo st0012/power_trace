@@ -7,6 +7,11 @@ module PowerTrace
 
     attr_reader :entries
 
+    OUTPUT_OPTIONS_DEFAULT = {
+      colorize: true,
+      line_limit: 100
+    }
+
     def initialize(options = {})
       @output_options = extract_output_options(options)
       @options = options
@@ -24,9 +29,10 @@ module PowerTrace
     private
 
     def extract_output_options(options)
-      output_options = { colorize: options.fetch(:colorize, true) }
-      options.delete(:colorize)
-      output_options
+      OUTPUT_OPTIONS_DEFAULT.each_with_object({}) do |(option_name, default), output_options|
+        output_options[option_name] = options.fetch(option_name, default)
+        options.delete(option_name)
+      end
     end
 
     def frame_manager
