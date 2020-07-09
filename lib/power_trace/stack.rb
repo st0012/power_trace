@@ -42,7 +42,7 @@ module PowerTrace
     def extract_entries
       frames = frame_manager.bindings
       power_trace_index = frames.index { |b| b.frame_description&.to_sym == :power_trace }
-      frames[power_trace_index+2..].map do |b|
+      frames[power_trace_index+1..].map do |b|
         case b.frame_type
         when :method
           MethodEntry.new(b)

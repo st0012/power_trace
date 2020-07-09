@@ -20,7 +20,11 @@ RSpec.describe PowerTrace do
   end
 
   let(:expected_output) do
-/.*:9:in `block in second_call'
+/.*:18:in `forth_call'
+  Arguments:
+    num1: 20
+    num2: 10
+.*:9:in `block in second_call'
   Arguments:
     ten: 10
     num: 20
