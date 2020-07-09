@@ -24,6 +24,6 @@ RSpec.describe PowerTrace do
     rescue => exception
     end
 
-    expect(exception.power_trace.to_s).to match(expected_output)
+    expect(exception.power_trace.to_s(colorize: false)).to match(expected_output)
   end
 end

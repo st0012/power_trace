@@ -14,7 +14,7 @@ class Foo
   end
 
   def forth_call(num1, num2)
-    puts(power_trace(colorize: false))
+    puts(power_trace.to_s(colorize: false))
   end
 end
 

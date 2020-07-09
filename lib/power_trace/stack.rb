@@ -13,17 +13,21 @@ module PowerTrace
     }
 
     def initialize(options = {})
-      @output_options = extract_output_options(options)
       @options = options
-      @entries = extract_entries
+      @entries = extract_entries.compact
     end
 
     def each(&block)
       @entries.each(&block)
     end
 
-    def to_s
-      @entries.compact.map { |e| e.to_s(@output_options) }.join("\n")
+    def to_backtrace(output_options = {})
+      output_options = extract_output_options(output_options)
+      @entries.map { |e| e.to_s(output_options) }
+    end
+
+    def to_s(output_options = {})
+      to_backtrace(output_options).join("\n")
     end
 
     private
