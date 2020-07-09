@@ -1,43 +1,21 @@
 RSpec.describe PowerTrace do
-  class Promotion; end
-  class Order; end
-  class Cart
-    def total
-      10
-    end
-    def promotion
-      Promotion.new
-    end
-  end
-  class CartOperationService
-    def perform(cart)
-      validate_cart(cart)
-      apply_discount(cart)
-      create_order(cart)
+  class Foo
+    def first_call
+      second_call(20)
     end
 
-    def validate_cart(cart)
-      cart.total
-      cart
-    end
-
-    def apply_discount(cart)
-      cart.promotion
-      cart
-    end
-
-    def create_order(cart)
-      Order.new
-      a_method_with_block do |one|
-        inspect_method
+    def second_call(num)
+      third_call_with_block do |ten|
+        forth_call(num, ten)
       end
     end
 
-    def a_method_with_block
-      yield
+    def third_call_with_block(&block)
+      yield(10)
     end
 
-    def inspect_method
+    def forth_call(num1, num2)
+      result = num1 + num2
       puts(power_trace)
     end
   end
@@ -46,6 +24,6 @@ RSpec.describe PowerTrace do
   end
 
   it "does something useful" do
-    CartOperationService.new.perform(Cart.new)
+    Foo.new.first_call
   end
 end
