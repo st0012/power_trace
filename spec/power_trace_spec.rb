@@ -21,11 +21,15 @@ RSpec.describe PowerTrace do
 
   let(:expected_output) do
 /.*:9:in `block in second_call'
-  <= {ten: 10, num: 20}
+  Arguments:
+    ten: 10
+    num: 20
 .*:14:in `third_call_with_block'
-  <= {block: #<Proc:.*@.*:8>}
+  Arguments:
+    block: #<Proc:.*@.*:8>
 .*:8:in `second_call'
-  <= {num: 20}/
+  Arguments:
+    num: 20/
   end
 
   it "prints traces correctly" do

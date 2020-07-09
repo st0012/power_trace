@@ -7,6 +7,8 @@ module PowerTrace
     include ColorizeHelper
     UNDEFINED = "[undefined]"
 
+    INDENT = "\s" * 4
+
     attr_reader :frame, :filepath, :line_number, :receiver
 
     def initialize(frame)
@@ -21,7 +23,7 @@ module PowerTrace
     end
 
     def arguments_string(options = {})
-      generate_string_result(arguments, false).truncate(options[:line_limit])
+      hash_to_string(arguments, false, options[:line_limit])
     end
 
     def call_trace(options = {})
@@ -53,7 +55,8 @@ module PowerTrace
       if !arguments.empty?
         <<~MSG.chomp
           #{call_trace(options)}
-            <= #{arguments_string(options)}
+            Arguments:
+          #{arguments_string(options)}
         MSG
       else
         call_trace(options)
@@ -62,47 +65,26 @@ module PowerTrace
 
     private
 
-    def generate_string_result(obj, inspect)
-      case obj
+    def hash_to_string(hash, inspect, truncation)
+      elements_string = hash.map do |key, value|
+        value_string = value_to_string(value, truncation)
+        "#{key.to_s}: #{value_string}"
+      end.join("\n#{INDENT}")
+      "#{INDENT}#{elements_string}"
+    end
+
+    def value_to_string(value, truncation)
+      case value
       when Array
-        array_to_string(obj, inspect)
+        value.to_s.truncate(truncation, omission: "...]")
       when Hash
-        hash_to_string(obj, inspect)
-      when UNDEFINED
-        UNDEFINED
-      when String
-        "\"#{obj}\""
+        value.to_s.truncate(truncation, omission: "...}")
       when nil
         "nil"
       else
-        inspect ? obj.inspect : obj.to_s
+        value.to_s.truncate(truncation)
       end
     end
-
-    def array_to_string(array, inspect)
-      elements_string = array.map do |elem|
-        generate_string_result(elem, inspect)
-      end.join(", ")
-      "[#{elements_string}]"
-    end
-
-    def hash_to_string(hash, inspect)
-      elements_string = hash.map do |key, value|
-        "#{key.to_s}: #{generate_string_result(value, inspect)}"
-      end.join(", ")
-      "{#{elements_string}}"
-    end
-
-    def obj_to_string(element, inspect)
-      to_string_method = inspect ? :inspect : :to_s
-
-      if !inspect && element.is_a?(String)
-        "\"#{element}\""
-      else
-        element.send(to_string_method)
-      end
-    end
-
   end
 end
 
