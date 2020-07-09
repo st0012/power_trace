@@ -8,3 +8,5 @@ module PowerTrace
 end
 
 include PowerTrace
+
+require "power_trace/exception_patch"
