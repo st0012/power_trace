@@ -1,15 +1,10 @@
+require "power_trace/helpers/colorize_helper"
+
 module PowerTrace
   class Entry
-    UNDEFINED = "[undefined]"
 
-    COLOR_CODES = {
-      green: 10,
-      yellow: 11,
-      blue: 12,
-      megenta: 13,
-      cyan: 14,
-      orange: 214
-    }
+    include ColorizeHelper
+    UNDEFINED = "[undefined]"
 
     attr_reader :frame, :filepath, :line_number, :receiver
 
@@ -20,23 +15,48 @@ module PowerTrace
       @receiver = frame.receiver
     end
 
-    def call_trace
-      "#{filepath}:#{line_number}:in `#{name}'"
+    def location(options = {})
+      "#{filepath}:#{line_number}"
+    end
+
+    def arguments_string(options = {})
+      generate_string_result(arguments, false)
+    end
+
+    def call_trace(options = {})
+      "#{location(options)}:in `#{name(options)}'"
+    end
+
+    ATTRIBUTE_COLORS = {
+      method: COLORS[:blue],
+      location: COLORS[:green],
+      arguments_string: COLORS[:orange]
+    }
+
+    ATTRIBUTE_COLORS.each do |attribute, color|
+      alias_method "original_#{attribute}".to_sym, attribute
+
+      # regenerate attributes with `colorize: true` support
+      define_method attribute do |options = {}|
+        call_result = send("original_#{attribute}", options)
+
+        if options[:colorize]
+          "#{color}#{call_result}#{COLORS[:reset]}"
+        else
+          call_result
+        end
+      end
     end
 
     def to_s(options = {})
       if !arguments.empty?
         <<~MSG.chomp
-          #{call_trace}
-            <= #{arguments_string}
+          #{call_trace(options)}
+            <= #{arguments_string(options)}
         MSG
       else
-        call_trace
+        call_trace(options)
       end
-    end
-
-    def arguments_string
-      generate_string_result(arguments, false)
     end
 
     private

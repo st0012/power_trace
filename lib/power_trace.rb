@@ -2,8 +2,8 @@ require "power_trace/version"
 require "power_trace/stack"
 
 module PowerTrace
-  def power_trace
-    PowerTrace::Stack.new
+  def power_trace(options = {})
+    PowerTrace::Stack.new(options)
   end
 end
 

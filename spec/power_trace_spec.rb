@@ -15,8 +15,7 @@ RSpec.describe PowerTrace do
     end
 
     def forth_call(num1, num2)
-      result = num1 + num2
-      puts(power_trace)
+      puts(power_trace(colorize: false))
     end
   end
 

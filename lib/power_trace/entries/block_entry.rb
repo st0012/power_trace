@@ -1,6 +1,6 @@
 module PowerTrace
   class BlockEntry < Entry
-    def name
+    def name(options = {})
       "block in #{frame.eval("__method__")}"
     end
 

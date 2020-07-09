@@ -1,6 +1,6 @@
 module PowerTrace
   class MethodEntry < Entry
-    def name
+    def name(options = {})
       @frame.frame_description
     end
 
