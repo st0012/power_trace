@@ -1,5 +1,5 @@
 RSpec.describe PowerTrace do
-  let(:expected_output) do
+  let(:expected_power_trace) do
 /.*:\d+:in `forth_call'
     \(Arguments\)
     num1: 20
@@ -16,7 +16,18 @@ RSpec.describe PowerTrace do
     num: 20/
   end
 
-  it "prints traces correctly" do
+  let(:expected_backtrace) do
+    [
+      /.*:\d+:in `forth_call'/,
+      /.*:\d+:in `block in second_call'/,
+      /.*:\d+:in `third_call_with_block'/,
+      /.*:\d+:in `second_call'/,
+      /.*:\d+:in `first_call'/,
+      /.*:\d+:in `block \(2 levels\) in <top \(required\)>'/
+    ]
+  end
+
+  let(:exception) do
     exception = nil
 
     begin
@@ -24,6 +35,16 @@ RSpec.describe PowerTrace do
     rescue => exception
     end
 
-    expect(exception.power_trace.to_s(colorize: false)).to match(expected_output)
+    exception
+  end
+
+  it "doesn't affect exception's original backtrace" do
+    expected_backtrace.each_with_index do |trace_regex, i|
+      expect(exception.backtrace[i]).to match(trace_regex)
+    end
+  end
+
+  it "inserts power_trace to exceptions" do
+    expect(exception.power_trace.to_s(colorize: false)).to match(expected_power_trace)
   end
 end
