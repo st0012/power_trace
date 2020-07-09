@@ -1,6 +1,10 @@
 require "power_trace/version"
+require "power_trace/stack"
 
 module PowerTrace
-  class Error < StandardError; end
-  # Your code goes here...
+  def power_trace
+    puts(PowerTrace::Stack.new.to_s)
+  end
 end
+
+include PowerTrace
