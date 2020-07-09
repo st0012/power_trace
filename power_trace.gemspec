@@ -6,8 +6,11 @@ Gem::Specification.new do |spec|
   spec.authors       = ["st0012"]
   spec.email         = ["stan001212@gmail.com"]
 
-  spec.summary       = %q{power_trace provides you more powerful backtraces.}
-  spec.description   = %q{power_trace provides you more powerful backtraces.}
+  spec.summary       = %q{power_trace provides you a more powerful backtrace.}
+  spec.description   = %q{Backtrace (Stack traces) are essential information for debugging our applications. However, they only tell us what the program did, but don't tell us what it had (the arguments, local variables...etc.). So it's very often that we'd need to visit each call site, rerun the program, and try to print out the variables. To me, It's like the Google map's navigation only tells us the name of the roads, but not showing us the map along with them.
+
+So I hope to solve this problem by adding some additional runtime info to the backtrace, and save us the work to manually look them up.}
+
   spec.homepage      = "https://github.com/st0012/power_trace"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
