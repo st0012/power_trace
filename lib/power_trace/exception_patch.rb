@@ -5,7 +5,7 @@ end
 TracePoint.trace(:raise) do |tp|
   begin
     e = tp.raised_exception
-    e.power_trace = power_trace(exception: true).to_backtrace
+    e.power_trace = power_trace(exception: true)
   rescue => e
     puts e
     puts e.backtrace
