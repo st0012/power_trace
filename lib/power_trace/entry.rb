@@ -20,25 +20,8 @@ module PowerTrace
       @receiver = frame.receiver
     end
 
-    def to_payload
-      Output::Payload.init({
-        target: nil,
-        receiver: @receiver,
-        method_name: method_name,
-        method_object: method,
-        arguments: arguments,
-        return_value: nil,
-        filepath: @filepath,
-        line_number: @line_number,
-        defined_class: defined_class,
-        trace: [],
-        is_private_call?: is_private_call?,
-        tp: nil
-      })
-    end
-
     def call_trace
-      "#{filepath}:#{line_number}:in `#{method_name}'"
+      "#{filepath}:#{line_number}:in `#{name}'"
     end
 
     def to_s(options = {})

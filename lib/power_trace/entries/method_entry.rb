@@ -1,11 +1,11 @@
 module PowerTrace
   class MethodEntry < Entry
-    def method_name
+    def name
       @frame.frame_description
     end
 
     def method
-      @method ||= Object.instance_method(:method).bind(@receiver).call(method_name)
+      @method ||= Object.instance_method(:method).bind(@receiver).call(name)
     end
 
     def arguments
@@ -20,10 +20,6 @@ module PowerTrace
 
     def defined_class
       method.owner
-    end
-
-    def is_private_call?
-      method.owner.private_method_defined?(method_name)
     end
   end
 end

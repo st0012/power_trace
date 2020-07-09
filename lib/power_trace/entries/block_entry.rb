@@ -1,6 +1,6 @@
 module PowerTrace
   class BlockEntry < Entry
-    def method_name
+    def name
       "block in #{frame.eval("__method__")}"
     end
 
@@ -15,10 +15,5 @@ module PowerTrace
 
     def defined_class
     end
-
-    def is_private_call?
-      false
-    end
   end
-
 end
