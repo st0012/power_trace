@@ -83,9 +83,21 @@ I don't recommend using it like this for other purposes, though. Because by defa
 - `colorize` - to decide whether to colorize each entry in their string format. Default is `true`.
 - `line_limit` - `power_trace` truncates every argument/local variable's value to avoid creating too much noise. Default is `100`
 
-### Get `power_trace` From An Exception (Experimental)
+### Use It With StandardError (Experimental)
 
-You can also access an exception object's enhanced backtrace with the `power_trace` method:
+If you set 
+
+```ruby
+PowerTrace.replace_backtrace = true
+```
+
+it will replace every `StandardError` exception's backtrace with the `power_trace.to_backtrace`. So most of the error traces you see will also contain the colorized environment information!
+
+This is still an experimental feature for now, as it has a very wide impact on all the libraries and your own code. **Don't try this on production!!!!**
+
+#### Get `power_trace` Manually From A StandardError Exception
+
+If you think the above feature is too aggressive. You can access an exception object's enhanced backtrace manually with the `power_trace` method:
 
 ```ruby
 begin
@@ -95,7 +107,7 @@ rescue => e
 end
 ```
 
-And use it as you get it from the call site.
+This feature doesn't require any flag to enable, as the information is added as an extra field and doesn't override anything.
 
 ## Inspirations & Helpful Tools
 

@@ -47,4 +47,21 @@ RSpec.describe PowerTrace do
   it "inserts power_trace to exceptions" do
     expect(exception.power_trace.to_s(colorize: false)).to match(expected_power_trace)
   end
+
+  context "when PowerTrace.replace_backtrace = true" do
+    around do |example|
+      begin
+        PowerTrace.replace_backtrace = true
+        PowerTrace.colorize_backtrace = false
+
+        example.run
+      ensure
+        PowerTrace.replace_backtrace = false
+        PowerTrace.colorize_backtrace = true
+      end
+    end
+    it "replaces error's backtrace" do
+      expect(exception.backtrace.join("\n")).to match(expected_power_trace)
+    end
+  end
 end
