@@ -61,6 +61,8 @@ module PowerTrace
           MethodEntry.new(b)
         when :block
           BlockEntry.new(b)
+        else
+          Entry.new(b)
         end
       end
     end

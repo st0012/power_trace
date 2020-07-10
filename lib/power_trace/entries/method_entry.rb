@@ -4,6 +4,8 @@ module PowerTrace
       @method ||= Object.instance_method(:method).bind(@receiver).call(name)
     end
 
+    private
+
     def method_parameters
       method.parameters.map { |parameter| parameter[1] }
     end

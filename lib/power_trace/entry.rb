@@ -66,6 +66,10 @@ module PowerTrace
 
     private
 
+    def method_parameters
+      []
+    end
+
     def assemble_string(options)
       strings = [call_trace(options)]
 
