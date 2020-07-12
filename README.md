@@ -1,6 +1,6 @@
 # power_trace
 
-![Ruby](https://github.com/st0012/power_trace/workflows/Ruby/badge.svg)
+![Ruby](https://github.com/st0012/power_trace/workflows/Ruby/badge.svg) [![Gem Version](https://badge.fury.io/rb/power_trace.svg)](https://badge.fury.io/rb/power_trace)
 
 Backtrace (Stack traces) are essential information for debugging our applications. However, they only tell us what the program did, but don't tell us what it had (the arguments, local variables...etc.). So it's very often that we'd need to visit each call site, rerun the program, and try to print out the variables. To me, It's like the Google map's navigation only tells us the name of the roads, but not showing us the map along with them.
 
@@ -82,6 +82,18 @@ I don't recommend using it like this for other purposes, though. Because by defa
 
 - `colorize` - to decide whether to colorize each entry in their string format. Default is `true`.
 - `line_limit` - `power_trace` truncates every argument/local variable's value to avoid creating too much noise. Default is `100`
+- `extra_info_indent` - 
+
+By default, extra info sections (locals/arguments) are indented with `4` spaces. Like:
+
+```
+/Users/st0012/projects/power_trace/spec/fixtures.rb:23:in `forth_call'
+    (Arguments)
+      num1: 20
+      num2: 10
+```
+
+You can change this indentation with the `extra_info_indent: Int` option. It's useful when you need to adjust the output from some formatting tools (like `RSpec` formatters).
 
 ### Use It With StandardError (Experimental)
 
@@ -123,7 +135,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at [https://github.com/[USERNAME]/power_trace](https://github.com/%5BUSERNAME%5D/power_trace). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/%5BUSERNAME%5D/power_trace/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at [https://github.com/st0012/power_trace](https://github.com/st0012/power_trace). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/%5BUSERNAME%5D/power_trace/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
