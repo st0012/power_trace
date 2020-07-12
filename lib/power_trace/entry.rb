@@ -95,13 +95,13 @@ module PowerTrace
 
     def hash_to_string(hash, inspect, options)
       truncation = options[:line_limit]
-      indent = "\s" * options[:extra_info_indent]
+      indentation = options[:indentation] + "\s" * 2
 
       elements_string = hash.map do |key, value|
         value_string = value_to_string(value, truncation)
         "#{key.to_s}: #{value_string}"
-      end.join("\n#{indent}")
-      "#{indent}#{elements_string}"
+      end.join("\n#{indentation}")
+      "#{indentation}#{elements_string}"
     end
 
     def value_to_string(value, truncation)

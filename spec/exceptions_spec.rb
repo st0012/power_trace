@@ -2,18 +2,18 @@ RSpec.describe PowerTrace do
   let(:expected_power_trace) do
 /.*:\d+:in `forth_call'
     \(Arguments\)
-    num1: 20
-    num2: 10
+      num1: 20
+      num2: 10
 .*:\d+:in `block in second_call'
     \(Locals\)
-    ten: 10
-    num: 20
+      ten: 10
+      num: 20
 .*:\d+:in `third_call_with_block'
     \(Arguments\)
-    block: #<Proc:.*@.*:\d+>
+      block: #<Proc:.*@.*:\d+>
 .*:\d+:in `second_call'
     \(Arguments\)
-    num: 20/
+      num: 20/
   end
 
   let(:expected_backtrace) do
@@ -52,18 +52,18 @@ RSpec.describe PowerTrace do
     let(:expected_power_trace) do
 /.*:\d+:in `forth_call'
         \(Arguments\)
-        num1: 20
-        num2: 10
+          num1: 20
+          num2: 10
 .*:\d+:in `block in second_call'
         \(Locals\)
-        ten: 10
-        num: 20
+          ten: 10
+          num: 20
 .*:\d+:in `third_call_with_block'
         \(Arguments\)
-        block: #<Proc:.*@.*:\d+>
+          block: #<Proc:.*@.*:\d+>
 .*:\d+:in `second_call'
         \(Arguments\)
-        num: 20/
+          num: 20/
     end
     it "indents the extra information according to the given value" do
       expect(exception.power_trace.to_s(colorize: false, extra_info_indent: 8)).to match(expected_power_trace)
