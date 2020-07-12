@@ -17,12 +17,5 @@ module PowerTrace
         "#{color_mark}#{str}#{RESET_MARK}"
       end
     end
-
-    COLORS = COLOR_CODES.each_with_object({}) do |(name, code), hash|
-      hash[name] = "\u001b[38;5;#{code}m"
-    end.merge(
-      reset: "\u001b[0m",
-      nocolor: ""
-    )
   end
 end

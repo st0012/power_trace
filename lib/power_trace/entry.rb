@@ -43,10 +43,10 @@ module PowerTrace
     end
 
     ATTRIBUTE_COLORS = {
-      name: COLORS[:blue],
-      location: COLORS[:green],
-      arguments_string: COLORS[:orange],
-      locals_string: COLORS[:megenta]
+      name: :blue,
+      location: :green,
+      arguments_string: :orange,
+      locals_string: :megenta
     }
 
     ATTRIBUTE_COLORS.each do |attribute, color|
@@ -57,7 +57,7 @@ module PowerTrace
         call_result = send("original_#{attribute}", options)
 
         if options[:colorize]
-          "#{color}#{call_result}#{COLORS[:reset]}"
+          send("#{color}_color", call_result)
         else
           call_result
         end
