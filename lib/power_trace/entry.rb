@@ -6,8 +6,6 @@ module PowerTrace
     include ColorizeHelper
     UNDEFINED = "[undefined]"
 
-    INDENT = "\s" * 4
-
     attr_reader :frame, :filepath, :line_number, :receiver, :locals, :arguments
 
     def initialize(frame)
@@ -27,11 +25,17 @@ module PowerTrace
     end
 
     def arguments_string(options = {})
-      hash_to_string(arguments, false, options[:line_limit])
+      <<~STR.chomp
+        #{options[:indentation]}(Arguments)
+        #{hash_to_string(arguments, false, options)}
+      STR
     end
 
     def locals_string(options = {})
-      hash_to_string(locals, false, options[:line_limit])
+      <<~STR.chomp
+        #{options[:indentation]}(Locals)
+        #{hash_to_string(locals, false, options)}
+      STR
     end
 
     def call_trace(options = {})
@@ -39,10 +43,10 @@ module PowerTrace
     end
 
     ATTRIBUTE_COLORS = {
-      name: COLORS[:blue],
-      location: COLORS[:green],
-      arguments_string: COLORS[:orange],
-      locals_string: COLORS[:megenta]
+      name: :blue,
+      location: :green,
+      arguments_string: :orange,
+      locals_string: :megenta
     }
 
     ATTRIBUTE_COLORS.each do |attribute, color|
@@ -53,7 +57,7 @@ module PowerTrace
         call_result = send("original_#{attribute}", options)
 
         if options[:colorize]
-          "#{color}#{call_result}#{COLORS[:reset]}"
+          send("#{color}_color", call_result)
         else
           call_result
         end
@@ -61,7 +65,9 @@ module PowerTrace
     end
 
     def to_s(options = {})
-      assemble_string(options)
+      # this is to prevent entries from polluting each other's options
+      # of course, that'd only happen if I did something stupid ;)
+      assemble_string(options.dup)
     end
 
     private
@@ -73,29 +79,29 @@ module PowerTrace
     def assemble_string(options)
       strings = [call_trace(options)]
 
+      indentation = "\s" * options[:extra_info_indent]
+      options[:indentation] = indentation
+
       if arguments.present?
-        strings << <<~STR.chomp
-            (Arguments)
-        #{arguments_string(options)}
-        STR
+        strings << arguments_string(options)
       end
 
       if locals.present?
-        strings << <<~STR.chomp
-            (Locals)
-        #{locals_string(options)}
-        STR
+        strings << locals_string(options)
       end
 
       strings.join("\n")
     end
 
-    def hash_to_string(hash, inspect, truncation)
+    def hash_to_string(hash, inspect, options)
+      truncation = options[:line_limit]
+      indentation = options[:indentation] + "\s" * 2
+
       elements_string = hash.map do |key, value|
         value_string = value_to_string(value, truncation)
         "#{key.to_s}: #{value_string}"
-      end.join("\n#{INDENT}")
-      "#{INDENT}#{elements_string}"
+      end.join("\n#{indentation}")
+      "#{indentation}#{elements_string}"
     end
 
     def value_to_string(value, truncation)

@@ -9,7 +9,8 @@ module PowerTrace
 
     OUTPUT_OPTIONS_DEFAULT = {
       colorize: true,
-      line_limit: 100
+      line_limit: 100,
+      extra_info_indent: 4
     }
 
     def initialize(options = {})
