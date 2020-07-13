@@ -38,6 +38,23 @@ RSpec.describe PowerTrace do
     exception
   end
 
+  context "when an exception is rescued and re-raised" do
+    it "doesn't capture and store power trace again" do
+      exception = nil
+
+      begin
+        begin
+          FooWithRuntimeException.new.first_call
+        rescue => exception
+          raise exception
+        end
+      rescue
+      end
+
+      expect(exception.stored_power_trace.to_s(colorize: false)).to match(expected_power_trace)
+    end
+  end
+
   it "doesn't affect exception's original backtrace" do
     expected_backtrace.each_with_index do |trace_regex, i|
       expect(exception.backtrace[i]).to match(trace_regex)
@@ -45,7 +62,7 @@ RSpec.describe PowerTrace do
   end
 
   it "inserts power_trace to exceptions" do
-    expect(exception.power_trace.to_s(colorize: false)).to match(expected_power_trace)
+    expect(exception.stored_power_trace.to_s(colorize: false)).to match(expected_power_trace)
   end
 
   context "with extra_info_indent: Int" do
@@ -66,7 +83,7 @@ RSpec.describe PowerTrace do
           num: 20/
     end
     it "indents the extra information according to the given value" do
-      expect(exception.power_trace.to_s(colorize: false, extra_info_indent: 8)).to match(expected_power_trace)
+      expect(exception.stored_power_trace.to_s(colorize: false, extra_info_indent: 8)).to match(expected_power_trace)
     end
   end
 

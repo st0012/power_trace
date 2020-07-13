@@ -121,6 +121,23 @@ end
 
 This feature doesn't require any flag to enable, as the information is added as an extra field and doesn't override anything.
 
+### Use It With RSpec
+
+You can also prettify RSpec's error messages with `power_trace`, just use the below config:
+
+```ruby
+PowerTrace.power_rspec_trace = true
+```
+
+Result:
+
+**Before**
+![normal rspec error message](https://github.com/st0012/power_trace/blob/master/images/normal_rspec_error.png)
+
+**After**
+![rspec error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_trace_rspec_error.png)
+
+
 ## Inspirations & Helpful Tools
 
 - [pretty_backtrace](https://github.com/ko1/pretty_backtrace)
