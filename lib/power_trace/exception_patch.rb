@@ -7,6 +7,9 @@ TracePoint.trace(:raise) do |tp|
     e = tp.raised_exception
 
     next unless e.is_a?(StandardError)
+
+    next if e.power_trace
+
     next if e.is_a?(LoadError)
     next if e.is_a?(NameError)
     next if e.is_a?(SystemCallError)
