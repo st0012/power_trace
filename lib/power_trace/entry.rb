@@ -10,8 +10,7 @@ module PowerTrace
 
     def initialize(frame)
       @frame = frame
-      @filepath = frame.eval("__FILE__")
-      @line_number = frame.eval("__LINE__")
+      @filepath, @line_number = frame.source_location
       @receiver = frame.receiver
       @locals, @arguments = colloct_locals_and_arguments
     end
