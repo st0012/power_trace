@@ -8,5 +8,10 @@ RSpec::Core::Formatters::ExceptionPresenter.class_eval do
     else
       original_formatted_backtrace
     end
+  rescue => e
+    puts(e)
+    puts(e.backtrace)
+    puts("there's a bug in power_trace, please open an issue at https://github.com/st0012/power_trace")
+    original_formatted_backtrace
   end
 end
