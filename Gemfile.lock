@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    power_trace (0.1.0)
+    power_trace (0.2.0)
       activesupport
       binding_of_caller (~> 0.8.0)
 
