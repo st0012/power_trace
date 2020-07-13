@@ -30,4 +30,6 @@ So I hope to solve this problem by adding some additional runtime info to the ba
 
   spec.add_dependency "activesupport"
   spec.add_dependency "binding_of_caller", "~> 0.8.0"
+
+  spec.add_development_dependency "pry"
 end
