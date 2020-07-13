@@ -29,6 +29,5 @@ So I hope to solve this problem by adding some additional runtime info to the ba
   spec.require_paths = ["lib"]
 
   spec.add_dependency "activesupport"
-  spec.add_dependency "pry"
-  spec.add_dependency "pry-stack_explorer"
+  spec.add_dependency "binding_of_caller", "~> 0.8.0"
 end

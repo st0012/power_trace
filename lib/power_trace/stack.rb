@@ -1,5 +1,5 @@
 require "power_trace/entry"
-require "pry-stack_explorer"
+require "binding_of_caller"
 
 module PowerTrace
   class Stack
@@ -45,12 +45,8 @@ module PowerTrace
       end
     end
 
-    def frame_manager
-      PryStackExplorer.frame_manager(Pry.new)
-    end
-
     def extract_entries
-      frames = frame_manager.bindings
+      frames = binding.callers
       # when using pry console, the power_trace_index will be `nil` and breaks EVERYTHING
       # so we should fallback it to 0
       power_trace_index = (frames.index { |b| b.frame_description&.to_sym == :power_trace } || 0) + 1
