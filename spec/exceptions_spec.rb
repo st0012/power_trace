@@ -51,7 +51,7 @@ RSpec.describe PowerTrace do
       rescue
       end
 
-      expect(exception.power_trace.to_s(colorize: false)).to match(expected_power_trace)
+      expect(exception.stored_power_trace.to_s(colorize: false)).to match(expected_power_trace)
     end
   end
 
@@ -62,7 +62,7 @@ RSpec.describe PowerTrace do
   end
 
   it "inserts power_trace to exceptions" do
-    expect(exception.power_trace.to_s(colorize: false)).to match(expected_power_trace)
+    expect(exception.stored_power_trace.to_s(colorize: false)).to match(expected_power_trace)
   end
 
   context "with extra_info_indent: Int" do
@@ -83,7 +83,7 @@ RSpec.describe PowerTrace do
           num: 20/
     end
     it "indents the extra information according to the given value" do
-      expect(exception.power_trace.to_s(colorize: false, extra_info_indent: 8)).to match(expected_power_trace)
+      expect(exception.stored_power_trace.to_s(colorize: false, extra_info_indent: 8)).to match(expected_power_trace)
     end
   end
 

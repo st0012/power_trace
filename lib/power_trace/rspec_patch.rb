@@ -3,7 +3,7 @@ RSpec::Core::Formatters::ExceptionPresenter.class_eval do
 
   def formatted_backtrace(exception=@exception)
     if PowerTrace.power_rspec_trace || PowerTrace.replace_backtrace
-      backtrace_formatter.format_backtrace(exception.power_trace.to_backtrace(extra_info_indent: 8), example.metadata) +
+      backtrace_formatter.format_backtrace(exception.stored_power_trace.to_backtrace(extra_info_indent: 8), example.metadata) +
         formatted_cause(exception)
     else
       original_formatted_backtrace
