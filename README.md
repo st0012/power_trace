@@ -126,7 +126,7 @@ This feature doesn't require any flag to enable, as the information is added as 
 You can also prettify RSpec's error messages with `power_trace`, just use the below config:
 
 ```ruby
-PowerTrace.adjust_rspec_error = true
+PowerTrace.power_rspec_trace = true
 ```
 
 Result:

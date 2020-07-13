@@ -8,8 +8,8 @@ module PowerTrace
   cattr_accessor :replace_backtrace, instance_accessor: false
   self.replace_backtrace = false
 
-  cattr_accessor :adjust_rspec_error, instance_accessor: false
-  self.adjust_rspec_error = false
+  cattr_accessor :power_rspec_trace, instance_accessor: false
+  self.power_rspec_trace = false
 
   def power_trace(options = {})
     PowerTrace::Stack.new(options)
