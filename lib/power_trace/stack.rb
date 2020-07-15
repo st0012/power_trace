@@ -60,16 +60,7 @@ module PowerTrace
           -1
         end
 
-      frames[power_trace_index..end_index].map do |b|
-        case b.frame_type
-        when :method
-          MethodEntry.new(b)
-        when :block
-          BlockEntry.new(b)
-        else
-          Entry.new(b)
-        end
-      end
+      frames[power_trace_index..end_index].map { |b| Entry.new(b) }
     end
   end
 end
