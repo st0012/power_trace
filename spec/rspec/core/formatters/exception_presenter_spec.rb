@@ -73,6 +73,45 @@ module RSpec::Core
       it "replaces backtrace with power_trace" do
         expect(presenter.formatted_backtrace.join("\n")).to match(expected_output)
       end
+
+      context "when there's an error processing backtrace" do
+        before do
+          allow(exception).to receive(:stored_power_trace).and_raise("Foo Error")
+        end
+
+        let(:expected_backtrace) do
+          [
+            /.*:\d+:in `forth_call'/,
+            /.*:\d+:in `block in second_call'/,
+            /.*:\d+:in `third_call_with_block'/,
+            /.*:\d+:in `second_call'/,
+            /.*:\d+:in `first_call'/,
+          ]
+        end
+
+        it "doesn't break anything" do
+          formatted_backtrace = nil
+
+          expect do
+            silent_io do
+              formatted_backtrace = presenter.formatted_backtrace
+            end
+          end.not_to raise_error
+
+          expected_backtrace.each_with_index do |trace_regex, i|
+            expect(formatted_backtrace[i]).to match(trace_regex)
+          end
+        end
+
+        it "displays the error to help users file an issue" do
+          result = capture_io do
+            presenter.formatted_backtrace
+          end
+
+          expect(result[:stdout]).to match(/Foo Error/)
+          expect(result[:stdout]).to match(/there's a bug in power_trace, please open an issue at https:\/\/github.com\/st0012\/power_trace/)
+        end
+      end
     end
   end
 end
