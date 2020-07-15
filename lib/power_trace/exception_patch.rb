@@ -34,8 +34,6 @@ TracePoint.trace(:raise) do |tp|
       )
     end
   rescue => e
-    puts(e)
-    puts(e.backtrace)
-    puts("power_trace's BUG")
+    PowerTrace.print_power_trace_error(e)
   end
 end

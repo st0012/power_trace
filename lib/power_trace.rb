@@ -14,6 +14,14 @@ module PowerTrace
   def power_trace(options = {})
     PowerTrace::Stack.new(options)
   end
+
+  class << self
+    def print_power_trace_error(exception)
+      puts(exception)
+      puts(exception.backtrace)
+      puts("there's a bug in power_trace, please open an issue at https://github.com/st0012/power_trace")
+    end
+  end
 end
 
 include PowerTrace

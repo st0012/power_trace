@@ -102,5 +102,38 @@ RSpec.describe PowerTrace do
     it "replaces error's backtrace" do
       expect(exception.backtrace.join("\n")).to match(expected_power_trace)
     end
+
+    context "when there's an error" do
+      before do
+        allow_any_instance_of(StandardError).to receive(:set_backtrace).and_raise("Foo Error")
+      end
+
+      let(:expected_backtrace) do
+        [
+          /.*:\d+:in `forth_call'/,
+          /.*:\d+:in `block in second_call'/,
+          /.*:\d+:in `third_call_with_block'/,
+          /.*:\d+:in `second_call'/,
+          /.*:\d+:in `first_call'/,
+        ]
+      end
+
+      it "doesn't break anything" do
+        expect do
+          silent_io do
+            exception
+          end
+        end.not_to raise_error
+      end
+
+      it "displays the error to help users file an issue" do
+        result = capture_io do
+          exception
+        end
+
+        expect(result[:stdout]).to match(/Foo Error/)
+        expect(result[:stdout]).to match(/there's a bug in power_trace, please open an issue at https:\/\/github.com\/st0012\/power_trace/)
+      end
+    end
   end
 end
