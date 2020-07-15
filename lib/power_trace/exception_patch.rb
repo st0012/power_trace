@@ -30,7 +30,7 @@ TracePoint.trace(:raise) do |tp|
 
     if PowerTrace.replace_backtrace
       e.set_backtrace(
-        e.stored_power_trace.to_backtrace(colorize: PowerTrace.colorize_backtrace)
+        e.stored_power_trace.to_backtrace
       )
     end
   rescue => e

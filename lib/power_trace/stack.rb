@@ -24,6 +24,7 @@ module PowerTrace
     end
 
     def to_backtrace(output_options = {})
+      output_options[:colorize] = output_options.fetch(:colorize, PowerTrace.colorize_backtrace) if @exception
       output_options = extract_output_options(output_options)
       @entries.map { |e| e.to_s(output_options) }
     end
