@@ -26,68 +26,85 @@ end
 
 foo = Foo.new
 
-def normal_raise(foo)
-  foo.first_call
-end
-
-def raise_with_power_rspec_trace(foo)
-  foo.first_call
-end
-
-def raise_with_replace_backtrace(foo)
-  foo.first_call
-end
-
 Benchmark.benchmark do |bm|
-  puts "#{n} times - ruby #{RUBY_VERSION}"
-
-  puts("Normal raise")
-  3.times do
-    bm.report do
-      n.times do
-        foo.first_call rescue nil
+  bench_proc = proc do
+    3.times do
+      bm.report do
+        n.times do
+          foo.first_call rescue nil
+        end
       end
     end
   end
+
+  puts "#{n} times - ruby #{RUBY_VERSION}"
+  puts("Normal raise")
+
+  bench_proc.call
+
+  puts("====================================")
+  puts("======= power_trace required =======")
+  puts("====================================")
 
   require "power_trace"
-  puts("==== power_trace required ====")
-  PowerTrace.power_rspec_trace = true
 
-  puts("Raise and store power_trace")
+  cases = [
+    {
+      replace_backtrace: false,
+      trace_limit: 10
+    },
+    {
+      replace_backtrace: false,
+      trace_limit: 50
+    },
+    {
+      replace_backtrace: true,
+      trace_limit: 10
+    },
+    {
+      replace_backtrace: true,
+      trace_limit: 50
+    }
+  ]
 
-  3.times do
-    bm.report do
-      n.times do
-        foo.first_call rescue nil
+  cases.each do |setup|
+    PowerTrace.replace_backtrace = setup[:replace_backtrace]
+    PowerTrace.trace_limit = setup[:trace_limit]
+
+    message =
+      if setup[:replace_backtrace]
+        "Raise and replace backtrace (trace_limit: #{PowerTrace.trace_limit})"
+      else
+        "Raise and store power_trace (trace_limit: #{PowerTrace.trace_limit})"
       end
-    end
-  end
 
-  PowerTrace.replace_backtrace = true
-
-  puts("Raise and replace backtrace")
-
-  3.times do
-    bm.report do
-      n.times do
-        foo.first_call rescue nil
-      end
-    end
+    puts(message)
+    bench_proc.call
   end
 end
 
 # 1000 times - ruby 2.7.1
 # Normal raise
-#    0.001719   0.000079   0.001798 (  0.001794)
-#    0.000896   0.000096   0.000992 (  0.000991)
-#    0.000904   0.000091   0.000995 (  0.000995)
-# ==== power_trace required ====
-# Raise and store power_trace
-#    1.152806   0.001213   1.154019 (  1.154360)
-#    1.159276   0.000568   1.159844 (  1.160036)
-#    1.189207   0.000889   1.190096 (  1.190849)
-# Raise and replace backtrace
-#    1.293883   0.001389   1.295272 (  1.295620)
-#    1.241478   0.000743   1.242221 (  1.242743)
-#    1.269536   0.001056   1.270592 (  1.270974)
+#    0.001606   0.000091   0.001697 (  0.001692)
+#    0.000953   0.000082   0.001035 (  0.001035)
+#    0.000885   0.000099   0.000984 (  0.000984)
+# ====================================
+# ======= power_trace required =======
+# ====================================
+# Raise and store power_trace (trace_limit: 10)
+#    0.197135   0.000762   0.197897 (  0.198118)
+#    0.203479   0.001198   0.204677 (  0.205063)
+#    0.197096   0.000967   0.198063 (  0.198181)
+# Raise and store power_trace (trace_limit: 50)
+#    1.187342   0.003542   1.190884 (  1.191932)
+#    1.183849   0.003203   1.187052 (  1.187759)
+#    1.196402   0.002802   1.199204 (  1.199782)
+# Raise and replace backtrace (trace_limit: 10)
+#    0.406225   0.001383   0.407608 (  0.408063)
+#    0.405999   0.000521   0.406520 (  0.406738)
+#    0.411041   0.001345   0.412386 (  0.412863)
+# Raise and replace backtrace (trace_limit: 50)
+#    1.528390   0.004480   1.532870 (  1.534161)
+#    1.544761   0.003519   1.548280 (  1.549895)
+#    1.387785   0.004530   1.392315 (  1.393240)
+
