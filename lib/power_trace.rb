@@ -11,6 +11,9 @@ module PowerTrace
   cattr_accessor :power_rspec_trace, instance_accessor: false
   self.power_rspec_trace = false
 
+  cattr_accessor :trace_limit, instance_accessor: false
+  self.trace_limit = 10
+
   def power_trace(options = {})
     PowerTrace::Stack.new(options)
   end

@@ -53,7 +53,14 @@ module PowerTrace
       power_trace_index = (frames.index { |b| b.frame_description&.to_sym == :power_trace } || 0) + 1
       power_trace_index += 1 if @exception
 
-      frames[power_trace_index..].map do |b|
+      end_index =
+        if @exception
+          power_trace_index + PowerTrace.trace_limit - 1
+        else
+          -1
+        end
+
+      frames[power_trace_index..end_index].map do |b|
         case b.frame_type
         when :method
           MethodEntry.new(b)
