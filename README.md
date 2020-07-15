@@ -137,22 +137,6 @@ Result:
 **After**
 ![rspec error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_trace_rspec_error.png)
 
-### PowerTrace.trace_limit
-
-Normally, an exception can have from 30+ or event 50+ stack traces. Collecting all of their information is slow and we generally don't care about the lower frames' information. 
-
-And because `power_trace` needs to collect variables info frame-by-frame. The computation is an O(N) operation, where N is the number of stack frames we need to collect information from. 
-
-So to avoid unnecessary computation and keep your program performant, `power_trace` will only go through a limit number of frames (default is 10). You can change the number with
-
-```ruby
-PowerTrace.trace_limit = 20
-```
-
-**This limit only applies to exception's power trace collection. If you call `power_trace` directly, it still goes through all stack frames**
-
-(Lazy evaluation isn't an option here as we need to access the stack
-right after the exception is raised)
 
 ## Inspirations & Helpful Tools
 
