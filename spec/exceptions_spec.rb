@@ -65,6 +65,15 @@ RSpec.describe PowerTrace do
     expect(exception.stored_power_trace.to_s(colorize: false)).to match(expected_power_trace)
   end
 
+  it "can use trace_limit to limit the number of traces" do
+    old_limit = PowerTrace.trace_limit
+    PowerTrace.trace_limit = 1
+
+    expect(exception.stored_power_trace.count).to eq(1)
+  ensure
+    PowerTrace.trace_limit = old_limit
+  end
+
   context "with extra_info_indent: Int" do
     let(:expected_power_trace) do
 /.*:\d+:in `forth_call'
