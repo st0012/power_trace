@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    power_trace (0.2.1)
+    power_trace (0.2.2)
       activesupport
       binding_of_caller (~> 0.8.0)
 
@@ -44,7 +44,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
