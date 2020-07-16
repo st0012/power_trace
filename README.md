@@ -50,12 +50,7 @@ It should look just like the normal `puts(caller)`, just colorized and with more
 
 Except for the call site, each entry also contains rich information about the runtime context. You can build your own debugging tool with that information easily.
 
-There are 2 types of entries:
-
-- `MethodEntry`- a method call's trace
-- `BlockEntry` - a block evaluation's trace
-
-They both have these attributes:
+Every entry has these attributes:
 
 - `filepath`
 - `line_number`
@@ -64,9 +59,7 @@ They both have these attributes:
 - `locals` - local variables in that frame
 - `arguments`
     - the method call's arguments
-    - will always be empty for a `BlockEntry`
-
-![use individual entries](https://github.com/st0012/power_trace/blob/master/images/entries.png)
+    - will be empty for `block` entries
 
 #### Convert It Into Backtraces
 
