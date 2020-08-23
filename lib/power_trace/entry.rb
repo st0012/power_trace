@@ -5,6 +5,9 @@ module PowerTrace
   class Entry
     include ColorizeHelper
     UNDEFINED = "[undefined]"
+    EMPTY_STRING = ""
+    SPACE = "\s"
+    DEFAULT_LINE_LIMIT = 100
 
     attr_reader :frame, :filepath, :line_number, :receiver, :locals, :arguments
 
@@ -78,7 +81,7 @@ module PowerTrace
     def assemble_string(options)
       strings = [call_trace(options)]
 
-      indentation = "\s" * options[:extra_info_indent]
+      indentation = SPACE * (options[:extra_info_indent] || 0)
       options[:indentation] = indentation
 
       if arguments.present?
@@ -93,8 +96,8 @@ module PowerTrace
     end
 
     def hash_to_string(hash, inspect, options)
-      truncation = options[:line_limit]
-      indentation = options[:indentation] + "\s" * 2
+      truncation = options[:line_limit] || DEFAULT_LINE_LIMIT
+      indentation = (options[:indentation] || EMPTY_STRING) + SPACE * 2
 
       elements_string = hash.map do |key, value|
         value_string = value_to_string(value, truncation)
@@ -111,6 +114,10 @@ module PowerTrace
         value.to_s.truncate(truncation, omission: "...}")
       when nil
         "nil"
+      when Symbol
+        ":#{value}"
+      when String
+        "\"#{value.truncate(truncation)}\""
       else
         value.to_s.truncate(truncation)
       end
