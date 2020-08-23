@@ -66,7 +66,7 @@ Result:
 ![normal minitest error message](https://github.com/st0012/power_trace/blob/master/images/normal_minitest_error.png)
 
 **After**
-![minitest error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_minitst_error.png)
+![minitest error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_minitest_error.png)
 
 ### Call `power_trace` directly
 
