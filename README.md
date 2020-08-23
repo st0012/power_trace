@@ -130,6 +130,22 @@ Result:
 **After**
 ![rspec error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_trace_rspec_error.png)
 
+### Use It With Minitest
+
+You can also prettify Minitest's error messages with `power_trace`, just use the below config:
+
+```ruby
+PowerTrace.power_minitest_trace = true
+```
+
+Result:
+
+**Before**
+![normal minitest error message](https://github.com/st0012/power_trace/blob/master/images/normal_minitest_error.png)
+
+**After**
+![minitest error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_minitst_error.png)
+
 
 ## Inspirations & Helpful Tools
 
