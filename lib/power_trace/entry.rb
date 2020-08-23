@@ -119,7 +119,11 @@ module PowerTrace
       when String
         "\"#{value.truncate(truncation)}\""
       else
-        value.to_s.truncate(truncation)
+        if defined?(ActiveRecord::Base) && value.is_a?(ActiveRecord::Base)
+          value.inspect.truncate(truncation, omission: "...>")
+        else
+          value.to_s.truncate(truncation)
+        end
       end
     end
 

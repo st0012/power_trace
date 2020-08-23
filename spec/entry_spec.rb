@@ -67,5 +67,19 @@ RSpec.describe PowerTrace::Entry do
         end
       end
     end
+
+    context "ActiveRecord Object" do
+      let(:value) { Post.new(id: 1, title: "foo") }
+
+      it "shows the object inspection" do
+        expect(subject.locals_string).to match('var: #<Post id: 1, title: "foo", content: nil, user_id: nil>')
+      end
+
+      context "with long value" do
+        it "truncates it to meet the line limit" do
+          expect(subject.locals_string(line_limit: 20)).to match('var: #<Post id: 1, ti...>')
+        end
+      end
+    end
   end
 end
