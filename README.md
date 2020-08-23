@@ -30,6 +30,44 @@ $ gem install power_trace
 
 ## Usage
 
+### Use It With RSpec
+
+You can prettify RSpec's error messages with `power_trace` by adding:
+
+```ruby
+# spec/spec_helper.rb
+
+require "power_trace"
+PowerTrace.power_rspec_trace = true
+```
+
+Result:
+
+**Before**
+![normal rspec error message](https://github.com/st0012/power_trace/blob/master/images/normal_rspec_error.png)
+
+**After**
+![rspec error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_trace_rspec_error.png)
+
+### Use It With Minitest
+
+You can also prettify Minitest's error messages with `power_trace` with:
+
+```ruby
+# test/test_helper.rb
+
+require "power_trace"
+PowerTrace.power_minitest_trace = true
+```
+
+Result:
+
+**Before**
+![normal minitest error message](https://github.com/st0012/power_trace/blob/master/images/normal_minitest_error.png)
+
+**After**
+![minitest error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_minitst_error.png)
+
 ### Call `power_trace` directly
 
 If you call `power_trace` directly, it'll return a `PowerTrace::Stack` instance that contains all the processed traces. You can then use it in 3 different ways:
@@ -108,44 +146,11 @@ If you think the above feature is too aggressive. You can access an exception ob
 begin
   perform_a_call
 rescue => e
-  e.power_trace # <= like this
+  e.stored_power_trace # <= like this
 end
 ```
 
 This feature doesn't require any flag to enable, as the information is added as an extra field and doesn't override anything.
-
-### Use It With RSpec
-
-You can also prettify RSpec's error messages with `power_trace`, just use the below config:
-
-```ruby
-PowerTrace.power_rspec_trace = true
-```
-
-Result:
-
-**Before**
-![normal rspec error message](https://github.com/st0012/power_trace/blob/master/images/normal_rspec_error.png)
-
-**After**
-![rspec error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_trace_rspec_error.png)
-
-### Use It With Minitest
-
-You can also prettify Minitest's error messages with `power_trace`, just use the below config:
-
-```ruby
-PowerTrace.power_minitest_trace = true
-```
-
-Result:
-
-**Before**
-![normal minitest error message](https://github.com/st0012/power_trace/blob/master/images/normal_minitest_error.png)
-
-**After**
-![minitest error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_minitst_error.png)
-
 
 ## Inspirations & Helpful Tools
 
