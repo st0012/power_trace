@@ -106,9 +106,9 @@ module PowerTrace
     def value_to_string(value, truncation)
       case value
       when Array
-        Object.instance_method(:to_s).bind(value).call.truncate(truncation, omission: "...]")
+        value.to_s.truncate(truncation, omission: "...]")
       when Hash
-        Object.instance_method(:to_s).bind(value).call.truncate(truncation, omission: "...}")
+        value.to_s.truncate(truncation, omission: "...}")
       when nil
         "nil"
       else
