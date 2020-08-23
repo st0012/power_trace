@@ -31,8 +31,8 @@ include PowerTrace
 
 require "power_trace/exception_patch"
 
-require "rspec" rescue LoadError
-
-if defined?(RSpec)
+begin
+  require "rspec"
   require "power_trace/rspec_patch"
+rescue LoadError
 end
