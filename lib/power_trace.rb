@@ -11,6 +11,9 @@ module PowerTrace
   cattr_accessor :power_rspec_trace, instance_accessor: false
   self.power_rspec_trace = false
 
+  cattr_accessor :power_minitest_trace, instance_accessor: false
+  self.power_rspec_trace = false
+
   cattr_accessor :trace_limit, instance_accessor: false
   self.trace_limit = 50
 
@@ -31,8 +34,14 @@ include PowerTrace
 
 require "power_trace/exception_patch"
 
-require "rspec" rescue LoadError
-
-if defined?(RSpec)
+begin
+  require "rspec"
   require "power_trace/rspec_patch"
+rescue LoadError
+end
+
+begin
+  require "minitest"
+  require "power_trace/minitest_patch"
+rescue LoadError
 end

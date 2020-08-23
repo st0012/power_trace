@@ -18,7 +18,7 @@ TracePoint.trace(:raise) do |tp|
     # these errors are commonly used as flow control so working with them can be error-prone and slow
     # we can revisit them once the gem gets more stable
     next if e.is_a?(LoadError)
-    next if e.is_a?(NameError)
+    next if e.is_a?(NameError) && !e.is_a?(NoMethodError)
     next if e.is_a?(SystemCallError)
 
     if defined?(Bootsnap)

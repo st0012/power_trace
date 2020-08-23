@@ -50,6 +50,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  minitest
   power_trace!
   pry
   rake (~> 12.0)
