@@ -1,3 +1,10 @@
+PATH
+  remote: ../..
+  specs:
+    power_trace (0.2.2)
+      activesupport
+      binding_of_caller (~> 0.8.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -59,6 +66,8 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     bindex (0.8.1)
+    binding_of_caller (0.8.0)
+      debug_inspector (>= 0.0.1)
     bootsnap (1.4.8)
       msgpack (~> 1.0)
     builder (3.2.4)
@@ -74,6 +83,7 @@ GEM
     childprocess (3.0.0)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
+    debug_inspector (0.0.3)
     erubi (1.9.0)
     ffi (1.13.1)
     globalid (0.4.2)
@@ -203,6 +213,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   jbuilder (~> 2.7)
   listen (~> 3.2)
+  power_trace!
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.2)
   sass-rails (>= 6)
