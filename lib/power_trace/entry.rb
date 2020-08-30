@@ -6,6 +6,9 @@ module PowerTrace
     include ColorizeHelper
     UNDEFINED = "[undefined]"
     EMPTY_STRING = ""
+    EMPTY_ARRAY = [].freeze
+    EMPTY_HASH = {}.freeze
+    SET_IVAR_INSTRUCTION_REGEX = /setinstancevariable/
     SPACE = "\s"
     DEFAULT_LINE_LIMIT = 100
 
@@ -162,11 +165,11 @@ module PowerTrace
     def collect_ivars
       iseq = frame.instance_variable_get(:@iseq)
 
-      return {} unless iseq
+      return EMPTY_HASH unless iseq
 
-      set_ivar_instructios = iseq.disasm.split("\n").select { |i| i.match?(/setinstancevariable/) }
+      set_ivar_instructios = iseq.disasm.split("\n").select { |i| i.match?(SET_IVAR_INSTRUCTION_REGEX) }
 
-      return {} unless set_ivar_instructios.present?
+      return EMPTY_HASH unless set_ivar_instructios.present?
 
       new_ivars = set_ivar_instructios.map do |i|
         i.match(/:(@\w+),/)[1]
@@ -209,7 +212,7 @@ module PowerTrace
       if method
         method.parameters.map { |parameter| parameter[1] }
       else
-        []
+        EMPTY_ARRAY
       end
     end
   end
