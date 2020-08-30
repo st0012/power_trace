@@ -9,13 +9,14 @@ module PowerTrace
     SPACE = "\s"
     DEFAULT_LINE_LIMIT = 100
 
-    attr_reader :frame, :filepath, :line_number, :receiver, :locals, :arguments
+    attr_reader :frame, :filepath, :line_number, :receiver, :locals, :arguments, :ivars
 
     def initialize(frame)
       @frame = frame
       @filepath, @line_number = frame.source_location
       @receiver = frame.receiver
-      @locals, @arguments = colloct_locals_and_arguments
+      @locals, @arguments = collect_locals_and_arguments
+      @ivars = collect_ivars
     end
 
     def name(options = {})
@@ -40,6 +41,13 @@ module PowerTrace
       STR
     end
 
+    def ivars_string(options = {})
+      <<~STR.chomp
+        #{options[:indentation]}(Instance Variables)
+        #{hash_to_string(ivars, false, options)}
+      STR
+    end
+
     def call_trace(options = {})
       "#{location(options)}:in `#{name(options)}'"
     end
@@ -48,7 +56,8 @@ module PowerTrace
       name: :blue,
       location: :green,
       arguments_string: :orange,
-      locals_string: :megenta
+      locals_string: :megenta,
+      ivars_string: :cyan
     }
 
     ATTRIBUTE_COLORS.each do |attribute, color|
@@ -90,6 +99,10 @@ module PowerTrace
 
       if locals.present?
         strings << locals_string(options)
+      end
+
+      if ivars.present?
+        strings << ivars_string(options)
       end
 
       strings.join("\n")
@@ -139,7 +152,33 @@ module PowerTrace
       end
     end
 
-    def colloct_locals_and_arguments
+    # we need to make sure
+    # 1. the frame is iseq (vm instructions)
+    # 2. and the instructions contain `setinstancevariable` instructions
+    #
+    # and only then we can start capturing instance variables from the frame
+    # this is to make sure we only capture the instance variables set inside the current method call
+    # otherwise, it'll create a lot noise
+    def collect_ivars
+      iseq = frame.instance_variable_get(:@iseq)
+
+      return {} unless iseq
+
+      set_ivar_instructios = iseq.disasm.split("\n").select { |i| i.match?(/setinstancevariable/) }
+
+      return {} unless set_ivar_instructios.present?
+
+      new_ivars = set_ivar_instructios.map do |i|
+        i.match(/:(@\w+),/)[1]
+      end
+
+      new_ivars.inject({}) do |hash, ivar_name|
+        hash[ivar_name] = receiver.instance_variable_get(ivar_name.to_sym)
+        hash
+      end
+    end
+
+    def collect_locals_and_arguments
       locals = {}
       arguments = {}
 

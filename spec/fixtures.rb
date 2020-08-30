@@ -10,6 +10,8 @@ class Foo
   end
 
   def third_call_with_block(&block)
+    @ivar1 = 10; @ivar2 = 20
+
     yield(10)
   end
 

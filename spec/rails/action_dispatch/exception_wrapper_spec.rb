@@ -33,6 +33,9 @@ RSpec.describe ActionDispatch::ExceptionWrapper do
 .*:\d+:in `third_call_with_block'
     \(Arguments\)
       block: #<Proc:.*:\d+>
+    \(Instance Variables\)
+      @ivar1: 10
+      @ivar2: 20
 .*:\d+:in `second_call'
     \(Arguments\)
       num: 20/
