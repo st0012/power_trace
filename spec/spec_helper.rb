@@ -23,4 +23,21 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  module ConfigHelper
+    def with_integration(integration)
+      begin
+        original_integrations = PowerTrace.integrations
+        PowerTrace.integrations = integration
+        PowerTrace.colorize_backtrace = false
+
+        yield
+      ensure
+        PowerTrace.integrations = original_integrations
+        PowerTrace.colorize_backtrace = true
+      end
+    end
+  end
+
+  config.include ConfigHelper
 end

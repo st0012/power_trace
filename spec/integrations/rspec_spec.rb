@@ -60,16 +60,10 @@ module RSpec::Core
           num: 20/
     end
 
-    context "with PowerTrace.power_rspec_trace = true" do
+    context "with PowerTrace.integrations = :rspec" do
       around do |example|
-        begin
-          PowerTrace.power_rspec_trace = true
-          PowerTrace.colorize_backtrace = false
-
+        with_integration(:rspec) do
           example.run
-        ensure
-          PowerTrace.power_rspec_trace = false
-          PowerTrace.colorize_backtrace = true
         end
       end
 

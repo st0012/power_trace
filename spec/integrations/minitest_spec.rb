@@ -54,7 +54,7 @@ RuntimeError: Foo Error
           num: 20/
   end
 
-  context "with PowerTrace.power_minitest_trace = false" do
+  context "without PowerTrace.integrations = :minitest" do
     let(:expected_output) do
       /1\) Error:
 FakeTest#test_error:
@@ -70,7 +70,7 @@ RuntimeError: Foo Error
     end
 
     before do
-      PowerTrace.power_minitest_trace = false
+      PowerTrace.integrations = []
     end
 
     it "doesn't do anything" do
@@ -82,16 +82,10 @@ RuntimeError: Foo Error
   end
 
 
-  context "with PowerTrace.power_minitest_trace = true" do
+  context "with PowerTrace.integrations = true" do
     around do |example|
-      begin
-        PowerTrace.power_minitest_trace = true
-        PowerTrace.colorize_backtrace = false
-
+      with_integration(:minitest) do
         example.run
-      ensure
-        PowerTrace.power_minitest_trace = false
-        PowerTrace.colorize_backtrace = true
       end
     end
 

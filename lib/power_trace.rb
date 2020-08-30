@@ -8,14 +8,7 @@ module PowerTrace
   cattr_accessor :replace_backtrace, instance_accessor: false
   self.replace_backtrace = false
 
-  cattr_accessor :power_rails_trace, instance_accessor: false
-  self.power_rails_trace = false
-
-  cattr_accessor :power_rspec_trace, instance_accessor: false
-  self.power_rspec_trace = false
-
-  cattr_accessor :power_minitest_trace, instance_accessor: false
-  self.power_rspec_trace = false
+  cattr_accessor :integrations, instance_accessor: false
 
   cattr_accessor :trace_limit, instance_accessor: false
   self.trace_limit = 50
@@ -25,12 +18,27 @@ module PowerTrace
   end
 
   class << self
-    def power_rails_trace=(val)
-      if val
-        require "power_trace/rails_patch"
+    AVAILABLE_INTEGRATIONS = [:rails, :rspec, :minitest].freeze
+
+    def integrations=(integrations)
+      integrations = Array(integrations).uniq.map(&:to_sym)
+
+      integrations.each do |integration|
+        unless AVAILABLE_INTEGRATIONS.include?(integration)
+          raise "#{integration} is not a supported integration, only #{AVAILABLE_INTEGRATIONS} is allowed."
+        end
+
+        case integration
+        when :rails
+          require "power_trace/integrations/rails"
+        when :rspec
+          require "power_trace/integrations/rspec"
+        when :minitest
+          require "power_trace/integrations/minitest"
+        end
       end
 
-      @@power_rails_trace = val
+      @@integrations = integrations
     end
 
     def print_power_trace_error(exception)
@@ -45,14 +53,3 @@ include PowerTrace
 
 require "power_trace/exception_patch"
 
-begin
-  require "rspec"
-  require "power_trace/rspec_patch"
-rescue LoadError
-end
-
-begin
-  require "minitest"
-  require "power_trace/minitest_patch"
-rescue LoadError
-end

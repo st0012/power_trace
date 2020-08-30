@@ -3,9 +3,12 @@ require "action_dispatch/middleware/exception_wrapper"
 require "active_support/backtrace_cleaner"
 
 RSpec.describe ActionDispatch::ExceptionWrapper do
-  before do
-    PowerTrace.power_rails_trace = true
+  around do |example|
+    with_integration(:rails) do
+      example.run
+    end
   end
+
   let(:exception) do
     begin
       FooWithRuntimeException.new.first_call
@@ -55,7 +58,7 @@ RSpec.describe ActionDispatch::ExceptionWrapper do
 
     it "returns power traces" do
       expect(traces.join("\n")).to match(expected_output)
-      expect(traces.count).to eq(9)
+      expect(traces.count).to eq(12)
     end
   end
 
@@ -68,7 +71,7 @@ RSpec.describe ActionDispatch::ExceptionWrapper do
 
     it "returns power traces" do
       expect(traces.join("\n")).not_to match(not_expected_output)
-      expect(traces.count).to eq(41)
+      expect(traces.count).to eq(38)
     end
   end
 end
