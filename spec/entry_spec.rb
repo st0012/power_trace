@@ -40,14 +40,14 @@ RSpec.describe PowerTrace::Entry do
       let(:value) { { foo: "bar", bar: "baz" } }
 
       it "wraps the value with {}" do
-        expect(subject.locals_string).to match('var: {:foo=>"bar", :bar=>"baz"}')
+        expect(subject.locals_string).to match('var: {foo: "bar", bar: "baz"}')
       end
 
       context "with long value" do
         let(:value) { { foo: "ssssss", bar: "yyyyyyyy" } }
 
         it "truncates it to meet the line limit" do
-          expect(subject.locals_string(line_limit: 30)).to match('var: {:foo=>"ssssss", :bar=>"yy...}')
+          expect(subject.locals_string(line_limit: 30)).to match('var: {foo: "ssssss", bar: "yyyy...}')
         end
       end
     end
