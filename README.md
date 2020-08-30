@@ -30,6 +30,28 @@ $ gem install power_trace
 
 ## Usage
 
+### Use It With Rails
+
+You can add more context to Rails' exception reporting with:
+
+```ruby
+# config/initializers/power_trace.rb
+
+if defined?(PowerTrace)
+  PowerTrace.power_rails_trace = true
+end
+```
+
+Result:
+
+**Before**
+![normal rails error message](https://github.com/st0012/power_trace/blob/master/images/normal_rails_error.png)
+
+**After**
+![rails error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_rails_error.png)
+
+
+
 ### Use It With RSpec
 
 You can prettify RSpec's error messages with `power_trace` by adding:
