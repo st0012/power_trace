@@ -14,12 +14,11 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Set up Ruby ${{ matrix.ruby_version }}
-      uses: actions/setup-ruby@v1
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby_version }}
 
     - name: Setup & Run
       run: |
-        gem install bundler
         bundle install --jobs 4 --retry 3
         bundle exec rake
