@@ -1,3 +1,3 @@
 if defined?(PowerTrace)
-  PowerTrace.replace_backtrace = true
+  PowerTrace.power_rails_trace = true
 end
