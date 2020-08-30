@@ -1,3 +1,3 @@
 if defined?(PowerTrace)
-  PowerTrace.power_rails_trace = true
+  PowerTrace.integrations = :rails
 end

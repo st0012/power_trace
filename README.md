@@ -38,7 +38,7 @@ You can add more context to Rails' exception reporting with:
 # config/initializers/power_trace.rb
 
 if defined?(PowerTrace)
-  PowerTrace.power_rails_trace = true
+  PowerTrace.integrations = :rails
 end
 ```
 
@@ -60,7 +60,7 @@ You can prettify RSpec's error messages with `power_trace` by adding:
 # spec/spec_helper.rb
 
 require "power_trace"
-PowerTrace.power_rspec_trace = true
+PowerTrace.integrations = :rspec
 ```
 
 Result:
@@ -79,7 +79,7 @@ You can also prettify Minitest's error messages with `power_trace` with:
 # test/test_helper.rb
 
 require "power_trace"
-PowerTrace.power_minitest_trace = true
+PowerTrace.integrations = :minitest
 ```
 
 Result:
@@ -89,6 +89,14 @@ Result:
 
 **After**
 ![minitest error message with config set to true](https://github.com/st0012/power_trace/blob/master/images/power_minitest_error.png)
+
+### Use It With Multiple Integrations
+
+It's also possible to use it with multiple integrations (e.g. `rspec` + `rails`):
+
+```ruby
+PowerTrace.integrations = [:rspec, :rails]
+```
 
 ### Call `power_trace` directly
 

@@ -3,8 +3,10 @@ require "action_dispatch"
 require "active_support/logger"
 
 RSpec.describe ActionDispatch::DebugExceptions do
-  before do
-    PowerTrace.power_rails_trace = true
+  around do |example|
+    with_integration(:rails) do
+      example.run
+    end
   end
 
   let(:exception) do
