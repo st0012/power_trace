@@ -30,11 +30,11 @@ module PowerTrace
 
         case integration
         when :rails
-          require "power_trace/rails_patch"
+          require "power_trace/integrations/rails"
         when :rspec
-          require "power_trace/rspec_patch"
+          require "power_trace/integrations/rspec"
         when :minitest
-          require "power_trace/minitest_patch"
+          require "power_trace/integrations/minitest"
         end
       end
 
