@@ -111,7 +111,12 @@ module PowerTrace
       when Array
         value.to_s.truncate(truncation, omission: "...]")
       when Hash
-        value.to_s.truncate(truncation, omission: "...}")
+        elements_string = value.map do |key, val|
+          value_string = value_to_string(val, truncation)
+          "#{key.to_s}: #{value_string}"
+        end.join(", ")
+
+        "{#{elements_string}}".truncate(truncation, omission: "...}")
       when nil
         "nil"
       when Symbol
@@ -119,8 +124,15 @@ module PowerTrace
       when String
         "\"#{value.truncate(truncation)}\""
       else
-        if defined?(ActiveRecord::Base) && value.is_a?(ActiveRecord::Base)
-          value.inspect.truncate(truncation, omission: "...>")
+        if defined?(ActiveRecord::Base)
+          case value
+          when ActiveRecord::Base
+            value.inspect.truncate(truncation, omission: "...>")
+          when ActiveRecord::Relation
+            "#{value}, SQL - (#{value.to_sql})"
+          else
+            value.to_s.truncate(truncation)
+          end
         else
           value.to_s.truncate(truncation)
         end
