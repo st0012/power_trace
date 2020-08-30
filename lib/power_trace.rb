@@ -8,6 +8,9 @@ module PowerTrace
   cattr_accessor :replace_backtrace, instance_accessor: false
   self.replace_backtrace = false
 
+  cattr_accessor :power_rails_trace, instance_accessor: false
+  self.power_rails_trace = false
+
   cattr_accessor :power_rspec_trace, instance_accessor: false
   self.power_rspec_trace = false
 
@@ -22,6 +25,14 @@ module PowerTrace
   end
 
   class << self
+    def power_rails_trace=(val)
+      if val
+        require "power_trace/rails_patch"
+      end
+
+      @@power_rails_trace = val
+    end
+
     def print_power_trace_error(exception)
       puts(exception)
       puts(exception.backtrace)
