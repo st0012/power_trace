@@ -4,6 +4,14 @@ require "fixtures"
 require "pry"
 require "helpers/io_capture_helper"
 
+require 'simplecov'
+SimpleCov.start
+
+if ENV["CI"]
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 RSpec.configure do |config|
   config.include IOCaptureHelper
   # Enable flags like --only-failures and --next-failure

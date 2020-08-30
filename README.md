@@ -1,6 +1,6 @@
 # power_trace
 
-![Ruby](https://github.com/st0012/power_trace/workflows/Ruby/badge.svg) [![Gem Version](https://badge.fury.io/rb/power_trace.svg)](https://badge.fury.io/rb/power_trace)
+![Ruby](https://github.com/st0012/power_trace/workflows/Ruby/badge.svg) [![Gem Version](https://badge.fury.io/rb/power_trace.svg)](https://badge.fury.io/rb/power_trace) [![codecov](https://codecov.io/gh/st0012/power_trace/branch/master/graph/badge.svg)](https://codecov.io/gh/st0012/power_trace)
 
 Backtrace (Stack traces) are essential information for debugging our applications. However, they only tell us what the program did, but don't tell us what it had (the arguments, local variables...etc.). So it's very often that we'd need to visit each call site, rerun the program, and try to print out the variables. To me, It's like the Google map's navigation only tells us the name of the roads, but not showing us the map along with them.
 
